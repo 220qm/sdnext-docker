@@ -16,14 +16,14 @@ COPY sdxl_vae.safetensors /sd-models/sdxl_vae.safetensors
 # and set version
 ARG WEBUI_VERSION
 WORKDIR /
-RUN git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui.git && \
-    cd /stable-diffusion-webui && \
+RUN git clone https://github.com/vladmandic/automatic.git && \
+    cd /automatic && \
     git checkout tags/${WEBUI_VERSION}
 
 ARG TORCH_VERSION
 ARG XFORMERS_VERSION
 ARG INDEX_URL
-WORKDIR /stable-diffusion-webui
+WORKDIR /automatic
 RUN python3 -m venv --system-site-packages /venv && \
     source /venv/bin/activate && \
     pip3 install --no-cache-dir torch==${TORCH_VERSION} torchvision torchaudio --index-url ${INDEX_URL} && \
@@ -32,7 +32,7 @@ RUN python3 -m venv --system-site-packages /venv && \
     deactivate
 
 # Install the dependencies for the Automatic1111 Stable Diffusion Web UI
-COPY a1111/cache-sd-model.py a1111/install-automatic.py ./
+COPY automatic/webui.sh ./
 RUN source /venv/bin/activate && \
     pip3 install -r requirements_versions.txt && \
     python3 -m install-automatic --skip-torch-cuda-test && \
@@ -63,18 +63,18 @@ ARG CONTROLNET_COMMIT
 ARG CIVITAI_BROWSER_PLUS_VERSION
 RUN source /venv/bin/activate && \
     pip3 install basicsr &&  \
-    cd /stable-diffusion-webui/extensions/sd-webui-controlnet && \
+    cd /automatic/extensions/sd-webui-controlnet && \
     pip3 install -r requirements.txt && \
-    cd /stable-diffusion-webui/extensions/deforum && \
+    cd /automatic/deforum && \
     pip3 install -r requirements.txt && \
-    cd /stable-diffusion-webui/extensions/sd-webui-reactor && \
+    cd /automatic/extensions/sd-webui-reactor && \
     pip3 install -r requirements.txt && \
     pip3 install onnxruntime-gpu && \
-    cd /stable-diffusion-webui/extensions/infinite-image-browsing && \
+    cd /automatic/extensions/infinite-image-browsing && \
     pip3 install -r requirements.txt && \
-    cd /stable-diffusion-webui/extensions/adetailer && \
+    cd /automatic/extensions/adetailer && \
     python3 -m install && \
-    cd /stable-diffusion-webui/extensions/sd_civitai_extension && \
+    cd /automatic/extensions/sd_civitai_extension && \
     pip3 install -r requirements.txt && \
     deactivate
 
@@ -85,7 +85,7 @@ RUN source /venv/bin/activate && \
 
 # Install dependencies for Civitai Browser+ extension
 RUN source /venv/bin/activate && \
-    cd /stable-diffusion-webui/extensions/sd-civitai-browser-plus && \
+    cd /automatic/extensions/sd-civitai-browser-plus && \
     pip3 install send2trash beautifulsoup4 ZipUnicode fake-useragent packaging pysocks && \
     deactivate
 
@@ -104,12 +104,12 @@ RUN source /venv/bin/activate && \
     deactivate
 
 # Add inswapper model for the ReActor extension
-RUN mkdir -p /stable-diffusion-webui/models/insightface && \
-    cd /stable-diffusion-webui/models/insightface && \
+RUN mkdir -p /automatic/models/insightface && \
+    cd /automatic/models/insightface && \
     wget https://github.com/facefusion/facefusion-assets/releases/download/models/inswapper_128.onnx
 
 # Configure ReActor to use the GPU instead of the CPU
-RUN echo "CUDA" > /stable-diffusion-webui/extensions/sd-webui-reactor/last_device.txt
+RUN echo "CUDA" > /automatic/extensions/sd-webui-reactor/last_device.txt
 
 # Install Application Manager
 ARG APP_MANAGER_VERSION
@@ -131,10 +131,10 @@ RUN git clone https://github.com/ashleykleynhans/civitai-downloader.git && \
     rm -rf civitai-downloader
 
 # Copy Stable Diffusion Web UI config files
-COPY a1111/relauncher.py a1111/webui-user.sh a1111/config.json a1111/ui-config.json /stable-diffusion-webui/
+COPY automatic/launch.py automatic/webui.sh automatic/config.json automatic/ui-config.json /automatic/
 
 # ADD SDXL styles.csv
-ADD https://raw.githubusercontent.com/Douleb/SDXL-750-Styles-GPT4-/main/styles.csv /stable-diffusion-webui/styles.csv
+#ADD https://raw.githubusercontent.com/Douleb/SDXL-750-Styles-GPT4-/main/styles.csv /stable-diffusion-webui/styles.csv
 
 # Remove existing SSH host keys
 RUN rm -f /etc/ssh/ssh_host_*
