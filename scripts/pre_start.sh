@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 export PYTHONUNBUFFERED=1
-export APP="automatic"
+export APP="SD.next"
 DOCKER_IMAGE_VERSION_FILE="/workspace/${APP}/docker_image_version"
 
 echo "Template version: ${TEMPLATE_VERSION}"
@@ -83,9 +83,9 @@ then
     echo ""
     echo "   SD.next:"
     echo "   ---------------------------------------------"
-    echo "   /start_a1111.sh"
+    echo "   /start_sdnext.sh"
 else
-    /start_a1111.sh
+    /start_sdnext.sh
 fi
 
 echo "All services have been started"
