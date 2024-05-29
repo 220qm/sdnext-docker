@@ -3,15 +3,15 @@ variable "REGISTRY" {
 }
 
 variable "REGISTRY_USER" {
-    default = "ashleykza"
+    default = "MisterTeee"
 }
 
 variable "APP" {
-    default = "a1111"
+    default = "SD.next"
 }
 
 variable "RELEASE" {
-    default = "1.9.4"
+    default = "1.0.0"
 }
 
 variable "CU_VERSION" {
@@ -19,7 +19,7 @@ variable "CU_VERSION" {
 }
 
 variable "BASE_IMAGE_REPOSITORY" {
-    default = "ashleykza/runpod-base"
+    default = "MisterTeee/runpod-base"
 }
 
 variable "BASE_IMAGE_VERSION" {
@@ -48,6 +48,6 @@ target "default" {
         CIVITAI_BROWSER_PLUS_VERSION = "v3.5.4"
         APP_MANAGER_VERSION = "1.0.2"
         CIVITAI_DOWNLOADER_VERSION = "2.1.0"
-        VENV_PATH = "/workspace/venvs/stable-diffusion-webui"
+        VENV_PATH = "/workspace/venvs/automatic"
     }
 }
